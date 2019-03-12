@@ -127,11 +127,6 @@ function searchConvo(){
   })
 }
 
-function getConversation(ind){
-
-
-}
-
 function selectConversation(){
 
   var items = $(".conversations > .item")
@@ -142,8 +137,20 @@ function selectConversation(){
     $(this).addClass("active");
 
     uploadConversation($(this).index());
-
   })
+}
+
+function updateContactInfo(ind){
+
+  var item = $(".conversations > .item").eq(ind);
+  var info = $(".right-side .top-bar .left");
+
+  var img = item.find(".image img").attr("src");
+  var name = item.find(".contact-name").text();
+
+  info.find(".image img").attr("src",img);
+  info.find(".contact-name").text(name);
+
 }
 
 function uploadConversation(ind){
@@ -156,7 +163,7 @@ function uploadConversation(ind){
     createMessage(conversations[ind][i].message, conversations[ind][i].type )
   }
 
-
+  updateContactInfo(ind);
 }
 
 function init(){
