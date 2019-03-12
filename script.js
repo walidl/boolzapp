@@ -1,5 +1,5 @@
 
-var conversations = [
+var wtpConvoMessages = [
 
   [
     {message: "Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
@@ -101,7 +101,7 @@ function getMessage(){
 
 function updateConversation(ind, mess , tipo){
 
-  conversations[ind].push({
+  wtpConvoMessages[ind].push({
 
     message: mess,
     type: tipo,
@@ -173,8 +173,8 @@ function uploadConversation(ind){
 
   messBoard.empty();
 
-  for (var i = 0; i < conversations[ind].length; i++) {
-    createMessage(conversations[ind][i].message, conversations[ind][i].type )
+  for (var i = 0; i < wtpConvoMessages[ind].length; i++) {
+    createMessage(wtpConvoMessages[ind][i].message, wtpConvoMessages[ind][i].type )
   }
 
   updateContactInfo(ind);
@@ -183,12 +183,28 @@ function uploadConversation(ind){
 function deleteMessage(){
 
   var convoInd = 0;
-  $(".message-board").on("click",".message .arrow",function(){
+
+  //mi mostra il menu quando clicco sulla freccetta
+
+  $(".message-board").on("click",".message .arrow",function(event){
 
     convoInd = $(".conversations > .item.active").index();
-    $(this).parents(".message").children(".menu").toggle(300);
 
+    $(".message-board .message .menu").hide();
+
+    $(this).parents(".message").children(".menu").toggle(100);
+
+    event.stopPropagation();
   })
+
+  // se clicco al di fuori del menu me lo chiude
+
+  $(window).click(function() {
+    $(".message-board .message .menu").hide();
+  });
+
+  // se clicco su Delete message mi cancella il message ancestor del menu in cui si trova
+  // e mi cancella dall'array delle conversazioni l'oggetto corrispondente al messaggio
 
   $(".message-board").on("click",".message .menu .deleteMess",function(){
 
@@ -196,9 +212,8 @@ function deleteMessage(){
     var messInd = thisMess.index();
 
     thisMess.remove();
-    conversations[convoInd].splice(messInd,1);
+    wtpConvoMessages[convoInd].splice(messInd,1);
   })
-
 
 }
 
@@ -208,7 +223,6 @@ function init(){
   selectConversation();
   getMessage();
   searchConvo();
-
   deleteMessage();
 }
 
