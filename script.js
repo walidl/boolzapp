@@ -68,35 +68,67 @@ function createMessage(text,type){
 
   msg.append(menu);
 
-
-
   board.scrollTop(board[0].scrollHeight);
 }
 
+
+function sendMessage(inp){
+
+  var  ind = $(".conversations > .item.active").index();
+
+  updateConversation(ind,  inp.val() , "sent")
+
+  createMessage( inp.val() , "sent");
+
+  inp.val("");
+  $(".message-bar .mess-button img").toggleClass("hide");
+
+  setTimeout(function(){
+
+    updateConversation(ind,  "Risposta" , "received")
+    createMessage( "Risposta" , "received");
+  },1000)
+
+}
+
+
 function getMessage(){
 
-  var inp = $("#messageInput")
+  var inp = $("#messageInput");
+
+
+  inp.on("input",function(){
+
+    if(inp.val() != "") {
+
+      $("#audioButton").addClass("hide");
+      $("#sendButton").removeClass("hide");
+    }
+    else{
+
+      $("#sendButton").addClass("hide");
+      $("#audioButton").removeClass("hide");
+    }
+  })
 
   inp.keyup(function(e){
 
     if(e.keyCode == 13) {
 
-      var  ind = $(".conversations > .item.active").index();
-
-      updateConversation(ind,  inp.val() , "sent")
-
-      createMessage( inp.val() , "sent");
-      inp.val("");
-
-      setTimeout(function(){
-
-        updateConversation(ind,  "Risposta" , "received")
-        createMessage( "Risposta" , "received");
-      },1000)
+      sendMessage(inp);
 
     }
   })
+}
 
+function sendButton(){
+
+  var btn = $("#sendButton");
+
+  btn.click(function(){
+
+    sendMessage( $("#messageInput") );
+  })
 }
 
 function updateConversation(ind, mess , tipo){
@@ -149,6 +181,7 @@ function selectConversation(){
 
     items.removeClass("active");
     $(this).addClass("active");
+    $("#messageInput").val("");
 
     uploadConversation($(this).index());
   })
@@ -222,6 +255,7 @@ function init(){
   uploadConversation(0);
   selectConversation();
   getMessage();
+  sendButton();
   searchConvo();
   deleteMessage();
 }
