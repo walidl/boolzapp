@@ -274,9 +274,8 @@ input:focus{
   padding: 0 21px;
 }
 
-
-
 /* MESSAGES */
+
 .mess-container{
   padding: 0 85px;
   margin-bottom: 10px;
@@ -291,9 +290,10 @@ input:focus{
 .message{
   max-width: 506px;
   padding: 8px;
+  padding-right: 30px;
   border-radius: 7.5px;
   box-shadow: 0 1px 0.5px rgba(0, 0, 0, 0.13);
-
+  position:relative;
 }
 
 .message p{
@@ -308,6 +308,23 @@ input:focus{
   opacity: .5;
 }
 
+.message .arrow{
+  opacity: 0;
+  position: absolute;
+  top:0;
+  right: 5px;
+  pointer-events: none;
+  transition: right 0.3s ease;
+  font-size: 18px;
+
+ }
+
+ .message:hover .arrow{
+   right: 10px;
+   pointer-events: auto;
+   opacity: 0.5;
+ }
+
 .message.received{
   background-color: white;
   float: left;
@@ -317,4 +334,31 @@ input:focus{
   background-color: #DCF8C6;
   align-self: flex-end;
   float:right
+}
+
+.message .menu{
+
+  display: none;
+  position: absolute;
+  z-index: 2;
+  top:25px;
+  right: 5px;
+  width: 178px;
+  background-color: white;
+  padding: 5px 0;
+  border-radius: 3px;
+  box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.26), 0 2px 10px 0 rgba(0, 0, 0, 0.16);
+}
+
+.message .menu .item{
+  height: 40px;
+  line-height: 40px;
+  padding: 0 10px;
+  font-size: 14px;
+  transition: background-color 0.3s;
+  cursor:pointer;
+}
+
+.message .menu .item:hover{
+  background-color: #F4F5F5
 }

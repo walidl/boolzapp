@@ -31,11 +31,6 @@ var conversations = [
 
 
 
-function updateScroll(item){
-
-    item.scrollTop(item[0].scrollHeight);
-}
-
 function createMessage(text,type){
 
   var board = $(".message-board")
@@ -43,7 +38,9 @@ function createMessage(text,type){
   var msg = $("<div></div>");
   var p = $("<p></p>");
   var info = $("<div></div>");
+  var arrow = $("<a href='#'></a>");
 
+  arrow.html("<i class='fas fa-angle-down'></i>").addClass("arrow");
   msgCont.addClass("mess-container");
   msg.addClass("message").addClass(type);
   p.text(text);
@@ -51,13 +48,29 @@ function createMessage(text,type){
 
   //append dall'interno verso l'esterno
 
-  msg.append(p).append(info);
+  msg.append(p).append(info).append(arrow);
   msgCont.append(msg);
   board.append(msgCont);
 
 
-  updateScroll(board)
+  //create dropdown menu
 
+  var menu = $("<div></div>");
+  menu.addClass("menu");
+
+  var item1 = $("<div>Message info</div>");
+  item1.addClass("item");
+
+  var item2 = $("<div>Delete Message</div>");
+  item2.addClass("item").addClass('deleteMess');
+
+  menu.append(item1).append(item2);
+
+  msg.append(menu);
+
+
+
+  board.scrollTop(board[0].scrollHeight);
 }
 
 function getMessage(){
@@ -83,6 +96,7 @@ function getMessage(){
 
     }
   })
+
 }
 
 function updateConversation(ind, mess , tipo){
@@ -166,12 +180,36 @@ function uploadConversation(ind){
   updateContactInfo(ind);
 }
 
+function deleteMessage(){
+
+  var convoInd = 0;
+  $(".message-board").on("click",".message .arrow",function(){
+
+    convoInd = $(".conversations > .item.active").index();
+    $(this).parents(".message").children(".menu").toggle(300);
+
+  })
+
+  $(".message-board").on("click",".message .menu .deleteMess",function(){
+
+    var thisMess =  $(this).parents(".mess-container")
+    var messInd = thisMess.index();
+
+    thisMess.remove();
+    conversations[convoInd].splice(messInd,1);
+  })
+
+
+}
+
 function init(){
 
   uploadConversation(0);
   selectConversation();
   getMessage();
   searchConvo();
+
+  deleteMessage();
 }
 
 $(document).ready(init)
