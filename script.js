@@ -3,34 +3,37 @@ var wtpConvoMessages = [
 
   [
     {message: "Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
-     type:"received"},
+     type:"received",
+     time: "12:01"},
+
     {message: "Ciao",
-     type:"sent"},
+     type:"sent",
+     time: "12:08"},
   ],
 
   [
-    {message: "Ciao, Come stai?", type:"received"},
-    {message: "Tutto Bene Grazie :)", type:"sent"}
+    {message: "Ciao, Come stai?", type:"received", time: "10:14"},
+    {message: "Tutto Bene Grazie :)", type:"sent", time: "12:03"}
   ],
 
   [
-    {message: "Ciao, Come stai?", type:"sent"},
-    {message: "Tutto Bene Grazie :)", type:"received"}
+    {message: "Ciao, Come stai?", type:"sent", time: "15:05"},
+    {message: "Tutto Bene Grazie :)", type:"received", time: "18:01"}
   ],
 
   [
-    {message: "Hello World", type:"sent"},
-    {message: "Whatsupp", type:"received"}
+    {message: "Hello World", type:"sent", time: "14:01"},
+    {message: "Whatsupp", type:"received", time: "19:14"}
   ],
   [
-    {message: "ciao Martina", type:"sent"},
-    {message: "ciao ! :)", type:"received"}
+    {message: "ciao Martina", type:"sent", time: "10:05"},
+    {message: "ciao ! :)", type:"received", time: "02:01"}
   ],
 
 ]
 
 
-function createMessage(text,type){
+function createMessage(text,type,time){
 
   var board = $(".message-board")
   var msgCont = $("<div></div>");
@@ -43,7 +46,7 @@ function createMessage(text,type){
   msgCont.addClass("mess-container");
   msg.addClass("message").addClass(type);
   p.text(text);
-  info.addClass("info").text("12:01");
+  info.addClass("info").text(time);
 
   //append dall'interno verso l'esterno
 
@@ -70,6 +73,27 @@ function createMessage(text,type){
   board.scrollTop(board[0].scrollHeight);
 }
 
+function prependZero(str){
+
+  while( str.length <2 ){
+    str = "0" + str ;
+  }
+}
+
+function currentTime(){
+
+  var d = new Date();
+  var h = d.getHours();
+  var m = d.getMinutes();
+
+  prependZero(h);
+  prependZero(m);
+
+  var time = h + ":" + m;
+
+  return time;
+}
+
 
 //SEND  AND RECEIVE MESSAGE FUNCTIONS
 
@@ -83,8 +107,8 @@ function sendMessage(inp){
   // faccio un update della variabile globale : inserisco il val dell'imput nell'array di indice 'ind'
   // creo il messaggio che avrà come testo il val dellinput
 
-  updateConversation(ind , inp.val() , "sent")
-  createMessage( inp.val() , "sent");
+  updateConversation(ind , inp.val() , currentTime() , "sent")
+  createMessage( inp.val() , "sent",currentTime());
 
   //dopo che ho mandato il mess svuoto l'input e nascondo il tasto di invio
 
@@ -95,8 +119,8 @@ function sendMessage(inp){
 
   setTimeout(function(){
 
-    updateConversation(ind , "Risposta" , "received")
-    createMessage( "Risposta" , "received");
+    updateConversation(ind , "Risposta" , currentTime(), "received")
+    createMessage( "Risposta" , "received",currentTime());
   },2000)
 
 }
@@ -110,7 +134,7 @@ function getMessage(){
   inp.keyup(function(e){
 
     if(e.keyCode == 13) {
-
+      currentTime();
       sendMessage(inp);
     }
   })
@@ -216,7 +240,7 @@ function uploadConversation(ind){
   // vado a prendere l'array in posizione  wtpConvoMessages[ind] e per ciascuno oggetto figlio creo un messaggio
 
   for (var i = 0; i < wtpConvoMessages[ind].length; i++) {
-    createMessage(wtpConvoMessages[ind][i].message, wtpConvoMessages[ind][i].type )
+    createMessage(wtpConvoMessages[ind][i].message, wtpConvoMessages[ind][i].type, wtpConvoMessages[ind][i].time)
   }
 
   updateContactInfo(ind);
@@ -239,12 +263,13 @@ function updateContactInfo(ind){
 
 // creo un nuvo oggetto con messaggio e tipo e lo pusho nell'array di wtpConvoMessages all'indice [ind]
 
-function updateConversation(ind, mess , tipo){
+function updateConversation(ind, mess ,tempo, tipo){
 
   wtpConvoMessages[ind].push({
 
     message: mess,
     type: tipo,
+    time: tempo,
   })
 }
 
@@ -266,6 +291,7 @@ function deleteMessage(){
   // se clicco al di fuori del menu me lo chiude
 
   $(window).click(function() {
+
     $(".message-board .message .menu").hide();
   });
 
