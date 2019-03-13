@@ -30,7 +30,6 @@ var wtpConvoMessages = [
 ]
 
 
-
 function createMessage(text,type){
 
   var board = $(".message-board")
@@ -72,30 +71,51 @@ function createMessage(text,type){
 }
 
 
+//SEND  AND RECEIVE MESSAGE FUNCTIONS
+
+
 function sendMessage(inp){
+
+  // salvo l'indice della conversazione attualmente attiva
 
   var  ind = $(".conversations > .item.active").index();
 
-  updateConversation(ind,  inp.val() , "sent")
+  // faccio un update della variabile globale : inserisco il val dell'imput nell'array di indice 'ind'
+  // creo il messaggio che avrà come testo il val dellinput
 
+  updateConversation(ind , inp.val() , "sent")
   createMessage( inp.val() , "sent");
+
+  //dopo che ho mandato il mess svuoto l'input e nascondo il tasto di invio
 
   inp.val("");
   $(".message-bar .mess-button img").toggleClass("hide");
 
+  // Mando un messaggio di rispota automatico dopoun certo t : update e creo come sopra
+
   setTimeout(function(){
 
-    updateConversation(ind,  "Risposta" , "received")
+    updateConversation(ind , "Risposta" , "received")
     createMessage( "Risposta" , "received");
-  },1000)
+  },2000)
 
 }
-
 
 function getMessage(){
 
   var inp = $("#messageInput");
 
+  // quando premo invio (key 13) chiamo la funzione per mandare il messaggio
+
+  inp.keyup(function(e){
+
+    if(e.keyCode == 13) {
+
+      sendMessage(inp);
+    }
+  })
+
+  //mostra il bottone freccia quando scrivo all'interno del input
 
   inp.on("input",function(){
 
@@ -110,16 +130,9 @@ function getMessage(){
       $("#audioButton").removeClass("hide");
     }
   })
-
-  inp.keyup(function(e){
-
-    if(e.keyCode == 13) {
-
-      sendMessage(inp);
-
-    }
-  })
 }
+
+// al click di sendButton invio il messaggio
 
 function sendButton(){
 
@@ -131,37 +144,9 @@ function sendButton(){
   })
 }
 
-function updateConversation(ind, mess , tipo){
+// SEARCH  & SELECT CONVERSATIONS ON SIDE-BAR
 
-  wtpConvoMessages[ind].push({
-
-    message: mess,
-    type: tipo,
-  })
-}
-
-function check(name, text, index){
-
-  if( name.toLowerCase().includes(text.toLowerCase()) ){
-
-    return index;
-  }
-}
-
-function lookForMatch(text){
-
-  var items = $(".conversations > .item");
-  items.hide();
-
-  for (var i = 0; i < items.length; i++) {
-
-    var name = items.eq(i).find(".contact-name").text();
-
-    var match = check(name , text, items.eq(i).index());
-
-    items.eq(match).show();
-  }
-}
+// prendo il valore i searchInput
 
 function searchConvo(){
 
@@ -172,6 +157,35 @@ function searchConvo(){
     lookForMatch(search.val());
   })
 }
+
+// funzione chiamata solo durante l'input e prende in ingresso il val() (text)
+
+function lookForMatch(text){
+
+  //prendo la lista di items di conversations
+  //li nascondo tutti
+
+  var items = $(".conversations > .item");
+
+  items.hide();
+
+  // per ogni item della lista vado a ricavare il nome del contatto
+  // e lo confronto con l'input (text)
+  //se il text è contenuto all'interno del nome allora mostro l'item che contiene il nome
+
+  for (var i = 0; i < items.length; i++) {
+
+    var name = items.eq(i).find(".contact-name").text();
+
+    if( name.toLowerCase().includes(text.toLowerCase()) ){
+
+      items.eq(i).show();
+    }
+  }
+}
+
+//al click su un item delle conversations la rendo attiva
+// prendo l'index dell'item e vado a fare upload dei messaggi nell'array nella stessa posizione index
 
 function selectConversation(){
 
@@ -187,6 +201,30 @@ function selectConversation(){
   })
 }
 
+// UPLOAD AND UPDATE CONVERSATIONS AND INFO
+
+// in ingresso ho l'indice dell'array in wtpConvoMessages desiderato
+
+function uploadConversation(ind){
+
+  //svuoto la message board
+
+  var messBoard = $(".message-board");
+
+  messBoard.empty();
+
+  // vado a prendere l'array in posizione  wtpConvoMessages[ind] e per ciascuno oggetto figlio creo un messaggio
+
+  for (var i = 0; i < wtpConvoMessages[ind].length; i++) {
+    createMessage(wtpConvoMessages[ind][i].message, wtpConvoMessages[ind][i].type )
+  }
+
+  updateContactInfo(ind);
+}
+
+// prendo le informazioni dall'item di conversations con classe active : immagine e nome
+//e li vado a inserire nella top-bar a destra
+
 function updateContactInfo(ind){
 
   var item = $(".conversations > .item").eq(ind);
@@ -197,35 +235,30 @@ function updateContactInfo(ind){
 
   info.find(".image img").attr("src",img);
   info.find(".contact-name").text(name);
-
 }
 
-function uploadConversation(ind){
+// creo un nuvo oggetto con messaggio e tipo e lo pusho nell'array di wtpConvoMessages all'indice [ind]
 
-  var messBoard = $(".message-board");
+function updateConversation(ind, mess , tipo){
 
-  messBoard.empty();
+  wtpConvoMessages[ind].push({
 
-  for (var i = 0; i < wtpConvoMessages[ind].length; i++) {
-    createMessage(wtpConvoMessages[ind][i].message, wtpConvoMessages[ind][i].type )
-  }
-
-  updateContactInfo(ind);
+    message: mess,
+    type: tipo,
+  })
 }
+
+// DELETE MESSAGES
 
 function deleteMessage(){
-
-  var convoInd = 0;
 
   //mi mostra il menu quando clicco sulla freccetta
 
   $(".message-board").on("click",".message .arrow",function(event){
 
-    convoInd = $(".conversations > .item.active").index();
-
     $(".message-board .message .menu").hide();
 
-    $(this).parents(".message").children(".menu").toggle(100);
+    $(this).closest(".message").children(".menu").toggle(100);
 
     event.stopPropagation();
   })
@@ -241,14 +274,15 @@ function deleteMessage(){
 
   $(".message-board").on("click",".message .menu .deleteMess",function(){
 
-    var thisMess =  $(this).parents(".mess-container")
+    var thisMess =  $(this).closest(".mess-container")
+    var convoInd = $(".conversations > .item.active").index();
     var messInd = thisMess.index();
 
     thisMess.remove();
     wtpConvoMessages[convoInd].splice(messInd,1);
   })
-
 }
+
 
 function init(){
 

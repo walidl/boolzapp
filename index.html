@@ -12,7 +12,12 @@
   <body>
     <div class="container">
 
+      <!-- LEFT SIFE -->
+
       <section class="left-side">
+
+        <!-- Informazioni dell'utente  -->
+
         <div class="myInfo">
         <div class="profile-pic">
             <a href=""><img src="img/profilepic.jpg"></a>
@@ -24,16 +29,21 @@
         </div>
         </div>
 
+        <!-- Search bar delle conversations -->
+
         <div class="search-bar">
 
           <div class="bar">
 
-            <a class ="searchButton" href="#"><img src="img/search-bar.svg"></a>
+            <a class ="searchButton" href=""><img src="img/search-bar.svg"></a>
             <input id="searchInput" type="text" placeholder="Cerca o inizia una nuova chat">
           </div>
         </div>
 
+        <!-- Lista delle conversazioni  -->
+
         <div class="conversations scroll">
+
           <div class="item active">
             <div class="image">
               <img src="img/contactpic.jpg">
@@ -106,9 +116,15 @@
         </div>
       </section>
 
+      <!-- RIGHT SIDE -->
+
       <section class="right-side">
 
+        <!-- Top bar  -->
+
         <div class="top-bar">
+
+          <!-- Top bar left : contanct info -->
           <div class="left">
             <div class="image">
               <img src="img/contactpic.jpg">
@@ -118,7 +134,7 @@
               <p class="utimo-accesso">Ultimo accesso oggi alle 14.02</p>
             </div>
           </div>
-
+          <!-- Tob bar right : icons-->
           <div class="iconBar">
             <a href=""><img src="img/search.svg"></a>
             <a href=""><img src="img/allega.svg"></a>
@@ -126,7 +142,11 @@
           </div>
         </div>
 
+        <!-- MESSAGE BOARD -->
+
         <div class="message-board scroll">
+
+          <!-- MESSAGE STRUCTURE EXAMPLE -->
 
           <!-- <div class="mess-container">
             <div class="message received">
@@ -134,19 +154,31 @@
               <div class="info">
                 <span>11:26</span>
               </div>
-            </div>
-          </div> -->
+              <a href="" class="arrow"><i class="fas fa-angle-down"></i></a>
+
+              <div class="menu">
+                <div class="item">
+                  Message info</div>
+                  <div class="item deleteMess">
+                    Delete Message
+                  </div>
+                </div>
+              </div>
+            </div> -->
+
+        <!-- Send message bar -->
 
         </div>
         <div class="message-bar">
-          <a href="#"><img src="img/emoji.svg"></a>
+          <a href=""><img src="img/emoji.svg"></a>
           <input id="messageInput" type="text" placeholder="Scrivi un messaggio">
 
-          <a  class="mess-button" href="#">
+          <a  class="mess-button" href="">
             <img id="audioButton" src="img/audio-message.svg">
             <img id="sendButton" class="hide" src="img/send.svg">
           </a>
         </div>
+
       </section>
 
     </div>
