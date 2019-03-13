@@ -73,21 +73,24 @@ function createMessage(text,type,time){
   board.scrollTop(board[0].scrollHeight);
 }
 
-function prependZero(str){
+// converte il num in ingresso in stringa e aggiungo zero prima del numero finchè non ho 2 caratteri
 
-  while( str.length <2 ){
+function prependZero(num){
+
+  var str = num.toString();
+
+  while( str.length < 2 ){
+
     str = "0" + str ;
   }
+  return str;
 }
 
 function currentTime(){
 
   var d = new Date();
-  var h = d.getHours();
-  var m = d.getMinutes();
-
-  prependZero(h);
-  prependZero(m);
+  var h = prependZero( d.getHours() );
+  var m = prependZero( d.getMinutes() );
 
   var time = h + ":" + m;
 
