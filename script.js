@@ -32,7 +32,9 @@ var wtpConvoMessages = [
 
 ]
 
+// funzione createMessage
 
+/*
 function createMessage(text,type,time){
 
   var board = $(".message-board")
@@ -72,6 +74,27 @@ function createMessage(text,type,time){
 
   board.scrollTop(board[0].scrollHeight);
 }
+*/
+
+function createHandlebar(text,type,time){
+
+  var board = $(".message-board");
+
+  var data = {
+
+    tipoMess: type,
+    messaggio: text,
+    orario: time,
+  }
+
+  var template = $("#message-template").html();
+
+  var comp = Handlebars.compile(template);
+
+  var mess = comp(data);
+
+  board.append(mess);
+}
 
 // converte il num in ingresso in stringa e aggiungo zero prima del numero finchè non ho 2 caratteri
 
@@ -83,6 +106,7 @@ function prependZero(num){
 
     str = "0" + str ;
   }
+
   return str;
 }
 
@@ -110,8 +134,9 @@ function sendMessage(inp){
   // faccio un update della variabile globale : inserisco il val dell'imput nell'array di indice 'ind'
   // creo il messaggio che avrà come testo il val dellinput
 
-  updateConversation(ind , inp.val() , currentTime() , "sent")
-  createMessage( inp.val() , "sent",currentTime());
+  updateConversation(ind , inp.val() , currentTime() , "sent");
+  createHandlebar( inp.val() , "sent",currentTime());
+  // createMessage( inp.val() , "sent",currentTime());
 
   //dopo che ho mandato il mess svuoto l'input e nascondo il tasto di invio
 
@@ -122,8 +147,16 @@ function sendMessage(inp){
 
   setTimeout(function(){
 
-    updateConversation(ind , "Risposta" , currentTime(), "received")
-    createMessage( "Risposta" , "received",currentTime());
+    updateConversation(ind , "Risposta" , currentTime(), "received");
+
+    //if per evitare che se nel tempo di attesa cambio conversazione  il messaggio di risposta viene visualizzata  nella conversazione sbagliata
+
+    var newInd = $(".conversations > .item.active").index();
+
+    if(newInd == ind) createHandlebar( "Risposta" , "received",currentTime())
+    /*createMessage( "Risposta" , "received",currentTime());*/
+
+
   },2000)
 
 }
@@ -137,7 +170,7 @@ function getMessage(){
   inp.keyup(function(e){
 
     if(e.keyCode == 13) {
-      currentTime();
+
       sendMessage(inp);
     }
   })
@@ -243,7 +276,8 @@ function uploadConversation(ind){
   // vado a prendere l'array in posizione  wtpConvoMessages[ind] e per ciascuno oggetto figlio creo un messaggio
 
   for (var i = 0; i < wtpConvoMessages[ind].length; i++) {
-    createMessage(wtpConvoMessages[ind][i].message, wtpConvoMessages[ind][i].type, wtpConvoMessages[ind][i].time)
+    createHandlebar(wtpConvoMessages[ind][i].message, wtpConvoMessages[ind][i].type, wtpConvoMessages[ind][i].time);
+    // createMessage(wtpConvoMessages[ind][i].message, wtpConvoMessages[ind][i].type, wtpConvoMessages[ind][i].time)
   }
 
   updateContactInfo(ind);

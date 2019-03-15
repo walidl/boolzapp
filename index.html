@@ -2,11 +2,42 @@
 <html lang="en" dir="ltr">
   <head>
     <meta charset="utf-8">
+
+    <!-- Font Awesome -->
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
+    <!-- Google font -->
     <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,600,700" rel="stylesheet">
+
+    <!-- Jquery -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
+    <!-- Js: Handlebar-->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.1.0/handlebars.min.js" charset="utf-8"></script>
+
+    <script id="message-template" type="text/x-handlebars-template">
+
+      <div class="mess-container">
+        <div class="message {{ tipoMess }}">
+          <p>{{ messaggio }}</p>
+          <div class="info"> {{orario}} </div>
+          <a href="#" class="arrow"> <i class="fas fa-angle-down"></i> </a>
+
+          <div class="menu">
+            <div class="item">Message info</div>
+            <div class="item deleteMess">Delete Message</div>
+          </div>
+      </div>
+    </div>
+
+    </script>
+
+    <!-- My style & script -->
+
     <link rel="stylesheet" href="style.css">
     <script src="script.js" charset="utf-8"></script>
+
+
     <title>Boolzapp</title>
   </head>
   <body>
@@ -20,12 +51,12 @@
 
         <div class="myInfo">
         <div class="profile-pic">
-            <a href=""><img src="img/profilepic.jpg"></a>
+            <a href="#"><img src="img/profilepic.jpg"></a>
         </div>
         <div class="iconBar">
-          <a href=""><img src="img/stato.svg"></a>
-          <a href=""><img src="img/new-chat.svg"></a>
-          <a href=""><img src="img/menu.svg"></a>
+          <a href="#"><img src="img/stato.svg"></a>
+          <a href="#"><img src="img/new-chat.svg"></a>
+          <a href="#"><img src="img/menu.svg"></a>
         </div>
         </div>
 
@@ -35,7 +66,7 @@
 
           <div class="bar">
 
-            <a class ="searchButton" href=""><img src="img/search-bar.svg"></a>
+            <a class ="searchButton" href="#"><img src="img/search-bar.svg"></a>
             <input id="searchInput" type="text" placeholder="Cerca o inizia una nuova chat">
           </div>
         </div>
@@ -136,9 +167,9 @@
           </div>
           <!-- Tob bar right : icons-->
           <div class="iconBar">
-            <a href=""><img src="img/search.svg"></a>
-            <a href=""><img src="img/allega.svg"></a>
-            <a href=""><img src="img/menu.svg"></a>
+            <a href="#"><img src="img/search.svg"></a>
+            <a href="#"><img src="img/allega.svg"></a>
+            <a href="#"><img src="img/menu.svg"></a>
           </div>
         </div>
 
@@ -154,7 +185,7 @@
               <div class="info">
                 <span>11:26</span>
               </div>
-              <a href="" class="arrow"><i class="fas fa-angle-down"></i></a>
+              <a href="#" class="arrow"><i class="fas fa-angle-down"></i></a>
 
               <div class="menu">
                 <div class="item">
@@ -170,10 +201,10 @@
 
         </div>
         <div class="message-bar">
-          <a href=""><img src="img/emoji.svg"></a>
+          <a href="#"><img src="img/emoji.svg"></a>
           <input id="messageInput" type="text" placeholder="Scrivi un messaggio">
 
-          <a  class="mess-button" href="">
+          <a  class="mess-button" href="#">
             <img id="audioButton" src="img/audio-message.svg">
             <img id="sendButton" class="hide" src="img/send.svg">
           </a>
