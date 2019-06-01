@@ -6,9 +6,7 @@ var wtpConvoMessages = [
      type:"received",
      time: "12:01"},
 
-    {message: "Ciao",
-     type:"sent",
-     time: "12:08"},
+    {message: "Ciao", type:"sent", time: "12:08"},
   ],
 
   [
@@ -32,49 +30,7 @@ var wtpConvoMessages = [
 
 ]
 
-// funzione createMessage
 
-/*
-function createMessage(text,type,time){
-
-  var board = $(".message-board")
-  var msgCont = $("<div></div>");
-  var msg = $("<div></div>");
-  var p = $("<p></p>");
-  var info = $("<div></div>");
-  var arrow = $("<a href='#'></a>");
-
-  arrow.html("<i class='fas fa-angle-down'></i>").addClass("arrow");
-  msgCont.addClass("mess-container");
-  msg.addClass("message").addClass(type);
-  p.text(text);
-  info.addClass("info").text(time);
-
-  //append dall'interno verso l'esterno
-
-  msg.append(p).append(info).append(arrow);
-  msgCont.append(msg);
-  board.append(msgCont);
-
-
-  //create dropdown menu
-
-  var menu = $("<div></div>");
-  menu.addClass("menu");
-
-  var item1 = $("<div>Message info</div>");
-  item1.addClass("item");
-
-  var item2 = $("<div>Delete Message</div>");
-  item2.addClass("item").addClass('deleteMess');
-
-  menu.append(item1).append(item2);
-
-  msg.append(menu);
-
-  board.scrollTop(board[0].scrollHeight);
-}
-*/
 
 function createHandlebar(text,type,time){
 
@@ -82,8 +38,8 @@ function createHandlebar(text,type,time){
 
   var data = {
 
-    tipoMess: type,
     messaggio: text,
+    tipoMess: type,
     orario: time,
   }
 
@@ -94,6 +50,8 @@ function createHandlebar(text,type,time){
   var mess = comp(data);
 
   board.append(mess);
+
+  board.scrollTop(board[0].scrollHeight);
 }
 
 // converte il num in ingresso in stringa e aggiungo zero prima del numero finchè non ho 2 caratteri
@@ -121,9 +79,7 @@ function currentTime(){
   return time;
 }
 
-
 //SEND  AND RECEIVE MESSAGE FUNCTIONS
-
 
 function sendMessage(inp){
 
@@ -144,22 +100,56 @@ function sendMessage(inp){
   $(".message-bar .mess-button img").toggleClass("hide");
 
   // Mando un messaggio di rispota automatico dopoun certo t : update e creo come sopra
-
   setTimeout(function(){
 
-    updateConversation(ind , "Risposta" , currentTime(), "received");
-
-    //if per evitare che se nel tempo di attesa cambio conversazione  il messaggio di risposta viene visualizzata  nella conversazione sbagliata
-
-    var newInd = $(".conversations > .item.active").index();
-
-    if(newInd == ind) createHandlebar( "Risposta" , "received",currentTime())
-    /*createMessage( "Risposta" , "received",currentTime());*/
-
-
-  },2000)
+    getApiAnswer(ind);
+  },1000)
 
 }
+
+function createAnswer(ind,message){
+
+  updateConversation(ind , message , currentTime(), "received");
+
+  //if per evitare che se nel tempo di attesa cambio conversazione  il messaggio di risposta viene visualizzata  nella conversazione sbagliata
+  var newInd = $(".conversations > .item.active").index();
+
+  if(newInd == ind) createHandlebar( message , "received",currentTime())
+
+}
+
+function getApiAnswer(ind){
+
+  var message = "";
+
+  $.ajax({
+
+    url: " https://www.boolean.careers/api/random/sentence",
+    method: "GET",
+    success: function(inData,state){
+
+      if (inData.success) {
+
+        message = inData.response;
+      }
+      else{
+
+        message = "Standard Answer";
+      }
+
+      createAnswer(ind,message)
+    },
+
+    error: function(){
+
+      message = "Standard Answer";
+      createAnswer(ind,message)
+      console.log("error");
+    }
+  })
+
+}
+
 
 function getMessage(){
 
@@ -345,7 +335,6 @@ function deleteMessage(){
     wtpConvoMessages[convoInd].splice(messInd,1);
   })
 }
-
 
 function init(){
 
